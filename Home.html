@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <title>Home-Game Calculator</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Turning ideas into functional apps with a background in software development.">
+  <meta name="keywords" content="html,css,javascript">
+  <meta name="author" content="Zamzam Issa">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="lang.js"></script>
+</head>
+<body id="hero-img">
+  <button type="button" id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+
+  <div class="container-box">
+    <h1 id="TimeForPlay"></h1>
+    <p data-i18n="subtitle">لعبة رياضيات تنافسية — فريقان يتنافسان على الإجابة</p>
+
+    <div class="mode-toggle">
+      <button type="button" id="modeIndividual" class="mode-btn active" data-i18n="modeIndividual" onclick="setMode('individual')">👤 فردي</button>
+      <button type="button" id="modeTeam" class="mode-btn" data-i18n="modeTeam" onclick="setMode('team')">👥 جماعي</button>
+    </div>
+
+    <!-- وضع فردي: شخص ضد شخص -->
+    <div id="individualBlock">
+      <div class="irow-teams">
+        <div class="idot-teams" style="background-color: rgb(5, 28, 142);"></div>
+        <input id="n1" type="text" data-i18n-placeholder="person1Placeholder" placeholder="اسم الشخص الأول" class="input-teams">
+      </div>
+      <div class="irow-teams">
+        <div class="idot-teams" style="background-color: rgb(147, 8, 11);"></div>
+        <input id="n2" type="text" data-i18n-placeholder="person2Placeholder" placeholder="اسم الشخص الثاني" class="input-teams">
+      </div>
+      <div class="team-hint" data-i18n="nameHint">الاسم أحرف فقط (عربي أو إنجليزي)، بدون أرقام أو رموز</div>
+    </div>
+
+    <!-- وضع جماعي: فريق ضد فريق، بأعضاء يتبادلون الأدوار كل جولة -->
+    <div id="teamBlock" style="display:none;">
+      <div class="team-group">
+        <div class="irow-teams">
+          <div class="idot-teams" style="background-color: rgb(5, 28, 142);"></div>
+          <input id="teamName1" type="text" data-i18n-placeholder="team1Placeholder" placeholder="اسم الفريق الأول" class="input-teams">
+        </div>
+        <div class="members-list" id="members1">
+          <div class="member-row">
+            <input type="text" class="member-input" data-i18n-placeholder="playerPlaceholder" placeholder="اسم اللاعب 1">
+            <button type="button" class="remove-member-btn" onclick="removeMember(this)">×</button>
+          </div>
+          <div class="member-row">
+            <input type="text" class="member-input" data-i18n-placeholder="playerPlaceholder" placeholder="اسم اللاعب 2">
+            <button type="button" class="remove-member-btn" onclick="removeMember(this)">×</button>
+          </div>
+        </div>
+        <button type="button" id="addBtn1" class="add-member-btn" onclick="addMember(1)">+ إضافة لاعب</button>
+        <div class="team-hint" data-i18n="teamCountHint">بين 2 و5 لاعبين</div>
+        <div class="team-hint" data-i18n="teamNameHint">الأسماء أحرف فقط (عربي أو إنجليزي)، بدون أرقام أو رموز</div>
+      </div>
+
+      <div class="team-group">
+        <div class="irow-teams">
+          <div class="idot-teams" style="background-color: rgb(147, 8, 11);"></div>
+          <input id="teamName2" type="text" data-i18n-placeholder="team2Placeholder" placeholder="اسم الفريق الثاني" class="input-teams">
+        </div>
+        <div class="members-list" id="members2">
+          <div class="member-row">
+            <input type="text" class="member-input" data-i18n-placeholder="playerPlaceholder" placeholder="اسم اللاعب 1">
+            <button type="button" class="remove-member-btn" onclick="removeMember(this)">×</button>
+          </div>
+          <div class="member-row">
+            <input type="text" class="member-input" data-i18n-placeholder="playerPlaceholder" placeholder="اسم اللاعب 2">
+            <button type="button" class="remove-member-btn" onclick="removeMember(this)">×</button>
+          </div>
+        </div>
+        <button type="button" id="addBtn2" class="add-member-btn" onclick="addMember(2)">+ إضافة لاعب</button>
+        <div class="team-hint" data-i18n="teamCountHint">بين 2 و5 لاعبين</div>
+        <div class="team-hint" data-i18n="teamNameHint">الأسماء أحرف فقط (عربي أو إنجليزي)، بدون أرقام أو رموز</div>
+      </div>
+    </div>
+
+    <div class="srow">
+      <div class="select-group">
+        <h3 data-i18n="operationsLabel">نوع العمليات</h3>
+        <select id="operations">
+          <option value="all" data-i18n="opAll">جميع العمليات</option>
+          <option value="addition" data-i18n="opAdd"> + جمع</option>
+          <option value="subtraction" data-i18n="opSub"> - طرح</option>
+          <option value="multiplication" data-i18n="opMul"> × ضرب</option>
+          <option value="division" data-i18n="opDiv"> ÷ قسمة</option>
+        </select>
+      </div>
+      <div class="select-group">
+        <h3 id="timeLabel" data-i18n="timeLabelGame">مدة اللعبة</h3>
+        <select id="gameTime">
+          <option value="0" data-i18n="timeUnlimited">بدون وقت محدد</option>
+          <option value="60" data-i18n="time1">1 دقيقة</option>
+          <option value="120" selected data-i18n="time2">2 دقائق</option>
+          <option value="180" data-i18n="time3">3 دقائق</option>
+        </select>
+      </div>
+      <div class="select-group">
+        <h3 data-i18n="difficultyLabel">مستوى الصعوبة</h3>
+        <select id="difficulty">
+          <option value="easy" data-i18n="diffEasy">سهل</option>
+          <option value="medium" data-i18n="diffMedium">متوسط</option>
+          <option value="hard" data-i18n="diffHard">صعب</option>
+        </select>
+      </div>
+    </div>
+    <button id="startGame" data-i18n="startGame" onclick="startGame()">ابدأ اللعبة</button>
+</div>
+
+<div class="credit">Done by Zamzam Issa</div>
+
+<script>
+  document.title = t('pageTitleHome');
+
+  // Typewriter effect for the title — يعيد قراءة النص الحالي حسب اللغة كل ما يُستدعى
+  let i = 0;
+  function typeWriter() {
+    const titleText = t('heroTitle');
+    document.getElementById('TimeForPlay').textContent = titleText.slice(0, i);
+    if (i < titleText.length) { i++; setTimeout(typeWriter, 90); }
+  }
+  typeWriter();
+
+  // ── الأسماء: أحرف فقط (عربي/إنجليزي)، بدون أرقام ولا رموز ──
+  // نفلتر أثناء الكتابة بدل ما ننتظر الإرسال، ونستخدم delegation عشان يشتغل
+  // حتى على حقول اللاعبين اللي تُضاف لاحقًا (addMember) بدون ما نربط مستمع لكل واحد
+  const NAME_CHARS = /[^a-zA-Z؀-ۿ\s]/g;
+  document.addEventListener('input', (e) => {
+    if (!e.target.matches('.input-teams, .member-input')) return;
+    const el = e.target;
+    const cleaned = el.value.replace(NAME_CHARS, '');
+    if (cleaned !== el.value) {
+      const pos = el.selectionStart - (el.value.length - cleaned.length);
+      el.value = cleaned;
+      el.setSelectionRange(pos, pos);
+    }
+  });
+
+  // ── وضع اللعب: فردي (شخص ضد شخص) أو جماعي (فريق أعضاؤه يتبادلون الأدوار) ──
+  let currentMode = 'individual';
+
+  function setMode(mode) {
+    currentMode = mode;
+    document.getElementById('modeIndividual').classList.toggle('active', mode === 'individual');
+    document.getElementById('modeTeam').classList.toggle('active', mode === 'team');
+    document.getElementById('individualBlock').style.display = mode === 'individual' ? '' : 'none';
+    document.getElementById('teamBlock').style.display = mode === 'team' ? '' : 'none';
+
+    // في الوضع الجماعي لازم يكون فيه وقت محدد لكل جولة عشان نقدر نبدّل اللاعبين تلقائيًا
+    const gameTime = document.getElementById('gameTime');
+    const noLimitOption = gameTime.querySelector('option[value="0"]');
+    const timeLabel = document.getElementById('timeLabel');
+    if (mode === 'team') {
+      noLimitOption.disabled = true;
+      if (gameTime.value === '0') gameTime.value = '60';
+      timeLabel.textContent = t('timeLabelRound');
+    } else {
+      noLimitOption.disabled = false;
+      timeLabel.textContent = t('timeLabelGame');
+    }
+  }
+
+  // ── إدارة قائمة أعضاء كل فريق (بين 2 و5) ──
+  function addMember(team) {
+    const container = document.getElementById('members' + team);
+    const rows = container.querySelectorAll('.member-row');
+    if (rows.length >= 5) return;
+    const row = document.createElement('div');
+    row.className = 'member-row';
+    row.innerHTML =
+      '<input type="text" class="member-input" data-i18n-placeholder="playerPlaceholder" placeholder="' + t('playerPlaceholder') + ' ' + (rows.length + 1) + '">' +
+      '<button type="button" class="remove-member-btn" onclick="removeMember(this)">×</button>';
+    container.appendChild(row);
+    refreshTeamControls(team);
+  }
+
+  function removeMember(btn) {
+    const row = btn.closest('.member-row');
+    const container = row.parentElement;
+    if (container.querySelectorAll('.member-row').length <= 2) return; // أقل شيء لاعبين
+    const team = container.id === 'members1' ? 1 : 2;
+    row.remove();
+    refreshTeamControls(team);
+  }
+
+  function refreshTeamControls(team) {
+    const container = document.getElementById('members' + team);
+    const rows = container.querySelectorAll('.member-row');
+    rows.forEach((row, idx) => {
+      row.querySelector('.remove-member-btn').style.visibility = rows.length > 2 ? 'visible' : 'hidden';
+      row.querySelector('.member-input').placeholder = `${t('playerPlaceholder')} ${idx + 1}`;
+    });
+    const addBtn = document.getElementById('addBtn' + team);
+    addBtn.disabled = rows.length >= 5;
+    addBtn.textContent = rows.length >= 5 ? t('maxPlayers') : t('addPlayer');
+  }
+
+  function getMemberNames(team) {
+    const inputs = document.getElementById('members' + team).querySelectorAll('.member-input');
+    return Array.from(inputs).map((inp, idx) => inp.value.trim() || `${t('fallbackPlayer')} ${idx + 1}`);
+  }
+
+  refreshTeamControls(1);
+  refreshTeamControls(2);
+
+  // يُستدعى تلقائيًا من lang.js كل ما تتغيّر اللغة، عشان نحدّث النصوص المولّدة ديناميكيًا
+  function onLangChange() {
+    document.title = t('pageTitleHome');
+    i = t('heroTitle').length; // نوقف التايبرايتر ونعرض العنوان كامل فورًا بدل إعادة الكتابة
+    document.getElementById('TimeForPlay').textContent = t('heroTitle');
+    document.getElementById('timeLabel').textContent =
+      currentMode === 'team' ? t('timeLabelRound') : t('timeLabelGame');
+    refreshTeamControls(1);
+    refreshTeamControls(2);
+  }
+
+  function startGame() {
+    let team1Name, team2Name, members1, members2;
+
+    if (currentMode === 'individual') {
+      team1Name = document.getElementById('n1').value.trim() || t('fallbackPerson1');
+      team2Name = document.getElementById('n2').value.trim() || t('fallbackPerson2');
+      members1 = [team1Name];
+      members2 = [team2Name];
+    } else {
+      team1Name = document.getElementById('teamName1').value.trim() || t('fallbackTeam1');
+      team2Name = document.getElementById('teamName2').value.trim() || t('fallbackTeam2');
+      members1 = getMemberNames(1);
+      members2 = getMemberNames(2);
+    }
+
+    localStorage.setItem('game_mode', currentMode);
+    localStorage.setItem('game_team1_name', team1Name);
+    localStorage.setItem('game_team2_name', team2Name);
+    localStorage.setItem('game_team1_members', JSON.stringify(members1));
+    localStorage.setItem('game_team2_members', JSON.stringify(members2));
+    localStorage.setItem('game_op', document.getElementById('operations').value);
+    localStorage.setItem('game_time', document.getElementById('gameTime').value);
+    localStorage.setItem('game_diff', document.getElementById('difficulty').value);
+
+    window.location.href = 'Game.html';
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <title>Game Start-Game Calculator</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Turning ideas into functional apps with a background in software development.">
+  <meta name="keywords" content="html,css,javascript">
+  <meta name="author" content="Zamzam Issa Al Balushi">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="lang.js"></script>
+</head>
+<body>
+<!--Header-->
+  <div id="game-container">
+    <div class="headerForWebsite">
+      <button id="homeButton" data-i18n="exitBtn" onclick="goHome()">← خروج</button>
+      <h3 id="gameTitle" data-i18n="gameTitle">شد الحبل — رياضيات</h3>
+      <div class="header-right">
+        <button type="button" id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+        <span id="roundInfo" class="round-info" style="display:none;"></span>
+        <div class="gettime" id="tim">⏱ <span id="time">--:--</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gmain">
+    <!-- Team 1 -->
+    <div class="tp tp1" id="p1">
+      <div class="tbadge tbadge1">
+        <div class="tname-wrap">
+          <span id="lb1" class="tname">الفريق 1</span>
+          <span id="lp1" class="tplayer"></span>
+        </div>
+        <div class="tsc" id="sc1">0</div>
+      </div>
+      <div class="tq" id="q1">? = 6 × 2</div>
+      <div class="tinp" id="in1">_</div>
+      <div class="numpad" id="np1"></div>
+    </div>
+
+    <!-- Tug Center -->
+    <div class="tc">
+      <div class="tbox">
+        <div class="tscore">
+          <span style="color:#3b82f6" id="sc1c">0</span>
+          <span style="color:#bbb;font-weight:400;font-size:.85em" data-i18n="pointsLabel">النقاط</span>
+          <span style="color:#ef4444" id="sc2c">0</span>
+        </div>
+
+        <svg viewBox="0 0 500 185" xmlns="http://www.w3.org/2000/svg" style="width:100%">
+          <!-- Ground -->
+          <rect x="10" y="156" width="480" height="5" rx="2.5" fill="#e0e0e0"/>
+          <!-- Center dashed -->
+          <line x1="250" y1="42" x2="250" y2="161" stroke="#ddd" stroke-width="2" stroke-dasharray="6,4"/>
+
+          <!-- ROPE -->
+          <line id="rope" x1="148" y1="106" x2="352" y2="106" stroke="#a0712a" stroke-width="5" stroke-linecap="round"/>
+
+          <!-- FLAG -->
+          <g id="flag" transform="translate(250,106)">
+            <rect x="-2.5" y="-24" width="5" height="34" fill="#555" rx="1"/>
+            <polygon points="2.5,-24 28,-14 2.5,-4" fill="#ef4444"/>
+          </g>
+
+          <!-- TEAM 1 — blue, left side, pulling right -->
+          <!-- Person A (front) -->
+          <g stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="106" cy="64" r="14" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+            <circle cx="102" cy="61" r="2.5" fill="#fff"/>
+            <circle cx="102" cy="61" r="1.5" fill="#1e3a8a"/>
+            <!-- body lean-back -->
+            <line x1="118" y1="148" x2="106" y2="100" stroke="#3b82f6" stroke-width="9" stroke-linecap="round"/>
+            <!-- legs -->
+            <line x1="118" y1="148" x2="134" y2="156" stroke="#1d4ed8" stroke-width="8" stroke-linecap="round"/>
+            <line x1="118" y1="148" x2="102" y2="156" stroke="#1d4ed8" stroke-width="8" stroke-linecap="round"/>
+            <!-- front arm → rope -->
+            <line x1="108" y1="116" x2="150" y2="106" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+            <!-- back arm -->
+            <line x1="108" y1="116" x2="78" y2="122" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+          </g>
+
+          <!-- Person B (back) -->
+          <g stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="64" cy="73" r="13" fill="#60a5fa" stroke="#1d4ed8" stroke-width="2"/>
+            <line x1="76" y1="148" x2="64" y2="112" stroke="#60a5fa" stroke-width="9" stroke-linecap="round"/>
+            <line x1="76" y1="148" x2="90" y2="156" stroke="#2563eb" stroke-width="8" stroke-linecap="round"/>
+            <line x1="76" y1="148" x2="62" y2="156" stroke="#2563eb" stroke-width="8" stroke-linecap="round"/>
+            <line x1="64" y1="124" x2="106" y2="118" stroke="#60a5fa" stroke-width="6" stroke-linecap="round"/>
+            <line x1="64" y1="124" x2="38" y2="130" stroke="#60a5fa" stroke-width="6" stroke-linecap="round"/>
+          </g>
+
+          <!-- TEAM 2 — red, right side, pulling left -->
+          <!-- Person A (front) -->
+          <g stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="394" cy="64" r="14" fill="#ef4444" stroke="#b91c1c" stroke-width="2"/>
+            <circle cx="398" cy="61" r="2.5" fill="#fff"/>
+            <circle cx="398" cy="61" r="1.5" fill="#5c1a1a"/>
+            <line x1="382" y1="148" x2="394" y2="100" stroke="#ef4444" stroke-width="9" stroke-linecap="round"/>
+            <line x1="382" y1="148" x2="366" y2="156" stroke="#b91c1c" stroke-width="8" stroke-linecap="round"/>
+            <line x1="382" y1="148" x2="398" y2="156" stroke="#b91c1c" stroke-width="8" stroke-linecap="round"/>
+            <line x1="392" y1="116" x2="350" y2="106" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/>
+            <line x1="392" y1="116" x2="422" y2="122" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/>
+          </g>
+
+          <!-- Person B (back) -->
+          <g stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="436" cy="73" r="13" fill="#f87171" stroke="#b91c1c" stroke-width="2"/>
+            <line x1="424" y1="148" x2="436" y2="112" stroke="#f87171" stroke-width="9" stroke-linecap="round"/>
+            <line x1="424" y1="148" x2="410" y2="156" stroke="#dc2626" stroke-width="8" stroke-linecap="round"/>
+            <line x1="424" y1="148" x2="438" y2="156" stroke="#dc2626" stroke-width="8" stroke-linecap="round"/>
+            <line x1="436" y1="124" x2="394" y2="118" stroke="#f87171" stroke-width="6" stroke-linecap="round"/>
+            <line x1="436" y1="124" x2="462" y2="130" stroke="#f87171" stroke-width="6" stroke-linecap="round"/>
+          </g>
+        </svg>
+
+        <div class="barwrap">
+          <div class="bar1" id="bar1" style="width:50%"></div>
+          <div class="bar2" id="bar2" style="width:50%"></div>
+        </div>
+        <div class="barlbl">
+          <span id="lb1b">الفريق 1</span>
+          <span id="lb2b">الفريق 2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team 2 -->
+    <div class="tp tp2" id="p2">
+      <div class="tbadge tbadge2">
+        <div class="tname-wrap">
+          <span id="lb2" class="tname">الفريق 2</span>
+          <span id="lp2" class="tplayer"></span>
+        </div>
+        <div class="tsc" id="sc2">0</div>
+      </div>
+      <div class="tq" id="q2">? = 7 × 2</div>
+      <div class="tinp" id="in2">_</div>
+      <div class="numpad" id="np2"></div>
+    </div>
+  </div>
+</div>
+
+<!-- READY: تُعرض قبل كل جولة، تعلن اللاعبَين وتعدّ استعداد -->
+<div id="readyOverlay">
+  <div class="gobox">
+    <div class="goem">⚔️</div>
+    <div class="golbl" data-i18n="upcomingChallenge">التحدي القادم</div>
+    <div class="omatch">
+      <span id="readyP1" class="oplayer oplayer1"></span>
+      <span class="ovs">VS</span>
+      <span id="readyP2" class="oplayer oplayer2"></span>
+    </div>
+    <div id="readyRoundInfo" class="oroundinfo"></div>
+    <div class="ocountdown-label" data-i18n="getReady">استعداد</div>
+    <div id="readyCountdown" class="ocountdown">٢٠</div>
+  </div>
+</div>
+
+<!-- RESULT: تُعرض بعد نهاية كل جولة، تعلن مين أخذ النقطة -->
+<div id="resultOverlay">
+  <div class="gobox">
+    <div class="goem" id="resultEm">🏆</div>
+    <div class="golbl" data-i18n="roundResultTitle">نتيجة الجولة</div>
+    <div class="oresult" id="resultText">—</div>
+    <div class="oscoreline" id="resultScoreline">0 — 0</div>
+  </div>
+</div>
+
+<!-- GAME OVER -->
+<div id="gameover">
+  <div class="gobox">
+    <div class="goem" id="goem">🏆</div>
+    <div class="golbl" data-i18n="winnerLabel">الفائز</div>
+    <div class="gowin" id="gowin">—</div>
+    <div class="gosc" id="gosc">0 — 0</div>
+    <button class="rbtn" data-i18n="playAgain" onclick="back()">العب مرة أخرى</button>
+  </div>
+</div>
+
+<div class="credit">Done by Zamzam Issa</div>
+
+<script>
+const G = {
+  active: false, op: 'all', diff: 'medium', mode: 'individual',
+  team1Name: '', team2Name: '',
+  members1: [], members2: [],
+  queue1: [], queue2: [],
+  currentP1: '', currentP2: '',
+  round: 0, totalRounds: 1, roundDuration: 0,
+  roundWins1: 0, roundWins2: 0,       // نقاط الفريقين (جولات مكسوبة) — هذا هو السكور الرسمي للمباراة
+  isTiebreaker: false, suddenDeath: false,
+  t1: { s: 0, a: '' }, t2: { s: 0, a: '' },   // أداء الجولة الحالية فقط (يصفّر كل جولة)
+  q1: null, q2: null,
+  left: 0, tmr: null, readyTmr: null, resultTmr: null
+};
+
+const READY_SECONDS = 20;   // وقت الاستعداد قبل كل جولة
+const RESULT_SECONDS = 3;   // مدة عرض نتيجة الجولة قبل ما ننتقل للي بعدها
+
+function rnd(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+
+// تنسيق الأرقام حسب اللغة: أرقام هندية (عربية) بوضع العربي، وإلا أرقام غربية عادية
+function toAr(n) {
+  if (getLang() !== 'ar') return String(n);
+  return String(n).replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+}
+
+// Number ranges per difficulty level
+const RANGES = {
+  easy:   { mul:[2,9],   add:[2,20],  sub:[5,30],  divB:[2,5],  divA:[2,9]  },
+  medium: { mul:[2,12],  add:[5,49],  sub:[10,60], divB:[2,9],  divA:[2,10] },
+  hard:   { mul:[7,15],  add:[20,99], sub:[20,99], divB:[2,12], divA:[2,12] }
+};
+
+function makeQ(op) {
+  const ops = op === 'all' ? ['×', '+', '-', '÷'] : [op];
+  const o = ops[rnd(0, ops.length - 1)];
+  const r = RANGES[G.diff] || RANGES.medium;
+  let a, b, ans;
+  if      (o === '×') { a = rnd(...r.mul);  b = rnd(...r.mul);        ans = a * b; }
+  else if (o === '+') { a = rnd(...r.add);  b = rnd(...r.add);        ans = a + b; }
+  else if (o === '-') { a = rnd(...r.sub);  b = rnd(1, a - 1);        ans = a - b; }
+  else                { b = rnd(...r.divB); ans = rnd(...r.divA); a = b * ans;      }
+  return { txt: `${toAr(a)} ${o} ${toAr(b)} = ?`, ans: String(ans) };
+}
+
+function buildNP(id, t) {
+  const el = document.getElementById(id);
+  el.innerHTML = '';
+  [1,2,3,4,5,6,7,8,9,'⌫',0,'✓'].forEach(v => {
+    const btn = document.createElement('button');
+    btn.className = 'nb' + (v === '⌫' ? ' ndel' : v === '✓' ? ' nok' : '');
+    btn.textContent = (v === '⌫' || v === '✓') ? v : toAr(v);
+    if      (v === '⌫') btn.onclick = () => del(t);
+    else if (v === '✓') btn.onclick = () => submit(t);
+    else                btn.onclick = () => add(t, String(v));
+    el.appendChild(btn);
+  });
+}
+
+function add(t, d) {
+  if (!G.active) return;
+  const s = t === 1 ? G.t1 : G.t2;
+  if (s.a.length >= 4) return;
+  s.a += d;
+  renderInput(t);
+}
+
+function del(t) {
+  if (!G.active) return;
+  const s = t === 1 ? G.t1 : G.t2;
+  s.a = s.a.slice(0, -1);
+  renderInput(t);
+}
+
+function renderInput(t) {
+  const s = t === 1 ? G.t1 : G.t2;
+  document.getElementById('in' + t).textContent = s.a ? toAr(s.a) : '_';
+}
+
+function submit(t) {
+  if (!G.active) return;
+  const s = t === 1 ? G.t1 : G.t2;
+  const q = t === 1 ? G.q1 : G.q2;
+  if (!s.a) return;
+  const ok = s.a === q.ans;
+  const p = document.getElementById('p' + t);
+  p.classList.remove('ag', 'ar');
+  void p.offsetWidth;
+  p.classList.add(ok ? 'ag' : 'ar');
+  if (ok) s.s++;
+  s.a = '';
+  const nq = makeQ(G.op);
+  if (t === 1) { G.q1 = nq; document.getElementById('q1').textContent = nq.txt; }
+  else         { G.q2 = nq; document.getElementById('q2').textContent = nq.txt; }
+  renderInput(t);
+  refresh();
+
+  // في الموت المفاجئ: أول إجابة صحيحة تحسم المباراة فورًا بدون انتظار المؤقت
+  if (ok && G.suddenDeath) {
+    G.active = false;
+    clearInterval(G.tmr);
+    if (t === 1) G.roundWins1++; else G.roundWins2++;
+    endGame();
+  }
+}
+
+function refresh() {
+  // sc1/sc2: عدد الإجابات الصحيحة بهالجولة فقط (يصفّر كل جولة)
+  document.getElementById('sc1').textContent  = toAr(G.t1.s);
+  document.getElementById('sc2').textContent  = toAr(G.t2.s);
+  // sc1c/sc2c: نقاط الفريق الرسمية (عدد الجولات المكسوبة) — هذا اللي يحدد الفائز بالنهاية
+  document.getElementById('sc1c').textContent = toAr(G.roundWins1);
+  document.getElementById('sc2c').textContent = toAr(G.roundWins2);
+  const tot = G.t1.s + G.t2.s;
+  const r   = tot === 0 ? 0.5 : G.t1.s / tot;
+  // شد الحبل يعكس أداء الجولة الحالية الحية
+  document.getElementById('flag').setAttribute('transform', `translate(${250 + (r - 0.5) * 180},106)`);
+  const p1 = Math.round(r * 100);
+  document.getElementById('bar1').style.width = p1 + '%';
+  document.getElementById('bar2').style.width = (100 - p1) + '%';
+}
+
+// ── خلط عشوائي لمصفوفة (Fisher-Yates) ──
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rnd(0, i);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ── نبني قائمة بطول عدد الجولات: نخلط أعضاء الفريق، ولو الجولات أكثر من عدد
+//    الأعضاء نعيد الخلط ونكمل، عشان كل جولة يكون فيها اسم جاهز ──
+function buildQueue(members, rounds) {
+  let queue = [];
+  while (queue.length < rounds) queue = queue.concat(shuffle(members));
+  return queue.slice(0, rounds);
+}
+
+// النص اللي يوصف الجولة الحالية (يُستخدم بالهيدر وبشاشة الاستعداد)
+function roundInfoText() {
+  if (G.suddenDeath)  return t('suddenDeath');
+  if (G.isTiebreaker) return t('tiebreakerRound');
+  if (G.totalRounds > 1) return t('roundOf', toAr(G.round + 1), toAr(G.totalRounds));
+  return '';
+}
+
+function updateRoundLabels() {
+  document.getElementById('lb1').textContent = G.team1Name;
+  document.getElementById('lb2').textContent = G.team2Name;
+
+  const roundInfo = document.getElementById('roundInfo');
+  const showPlayers = G.totalRounds > 1 || G.isTiebreaker || G.suddenDeath;
+  document.getElementById('lp1').textContent = showPlayers ? G.currentP1 : '';
+  document.getElementById('lp2').textContent = showPlayers ? G.currentP2 : '';
+
+  const info = roundInfoText();
+  roundInfo.style.display = info ? '' : 'none';
+  roundInfo.textContent = info;
+
+  document.getElementById('lb1b').textContent = G.team1Name;
+  document.getElementById('lb2b').textContent = G.team2Name;
+}
+
+// شاشة الاستعداد: تعلن اللاعبَين القادمَين وتعدّ 45 ثانية، وبعدها تستدعي doneFn (بدء الجولة فعليًا)
+function showReady(doneFn) {
+  G.active = false;
+  clearInterval(G.tmr);
+  document.getElementById('tim').style.display = 'none';
+  updateRoundLabels();
+
+  document.getElementById('readyP1').textContent = G.currentP1;
+  document.getElementById('readyP2').textContent = G.currentP2;
+  document.getElementById('readyRoundInfo').textContent = roundInfoText();
+
+  let left = READY_SECONDS;
+  const countdownEl = document.getElementById('readyCountdown');
+  countdownEl.textContent = toAr(left);
+  document.getElementById('readyOverlay').style.display = 'flex';
+
+  clearInterval(G.readyTmr);
+  G.readyTmr = setInterval(() => {
+    left--;
+    countdownEl.textContent = toAr(Math.max(left, 0));
+    if (left <= 0) {
+      clearInterval(G.readyTmr);
+      document.getElementById('readyOverlay').style.display = 'none';
+      doneFn();
+    }
+  }, 1000);
+}
+
+// شاشة نتيجة الجولة: تعلن مين أخذ النقطة، ثم بعد بضع ثواني تستدعي doneFn (الخطوة التالية)
+function showResult(pointTeam, doneFn) {
+  G.active = false;
+  const em = document.getElementById('resultEm');
+  const text = document.getElementById('resultText');
+  if (pointTeam === 1) {
+    em.textContent = '🏆';
+    text.textContent = `${t('tookPoint', G.team1Name)} 🔵`;
+  } else if (pointTeam === 2) {
+    em.textContent = '🏆';
+    text.textContent = `${t('tookPoint', G.team2Name)} 🔴`;
+  } else {
+    em.textContent = '🤝';
+    text.textContent = t('tieRound');
+  }
+  document.getElementById('resultScoreline').textContent =
+    `${G.team1Name}: ${toAr(G.roundWins1)}  —  ${G.team2Name}: ${toAr(G.roundWins2)}`;
+  document.getElementById('resultOverlay').style.display = 'flex';
+
+  clearTimeout(G.resultTmr);
+  G.resultTmr = setTimeout(() => {
+    document.getElementById('resultOverlay').style.display = 'none';
+    doneFn();
+  }, RESULT_SECONDS * 1000);
+}
+
+// الجولة المُجدولة: تاخذ اللاعبين التاليين من الطابور العشوائي لكل فريق
+function scheduleRound() {
+  G.currentP1 = G.queue1[G.round];
+  G.currentP2 = G.queue2[G.round];
+  showReady(beginRound);
+}
+
+// تعادل الفريقان بالنقاط بعد اكتمال كل الجولات → جولة فاصلة حاسمة بلاعبين عشوائيين
+function startTiebreaker() {
+  G.isTiebreaker = true;
+  G.currentP1 = G.members1[rnd(0, G.members1.length - 1)];
+  G.currentP2 = G.members2[rnd(0, G.members2.length - 1)];
+  showReady(beginRound);
+}
+
+// لو حتى الجولة الفاصلة انتهت بتعادل → موت مفاجئ بدون مؤقت، أول إجابة صحيحة تفوز
+function startSuddenDeath() {
+  G.suddenDeath = true;
+  showReady(beginRound);
+}
+
+function beginRound() {
+  updateRoundLabels();
+  G.q1 = makeQ(G.op);
+  G.q2 = makeQ(G.op);
+  document.getElementById('q1').textContent = G.q1.txt;
+  document.getElementById('q2').textContent = G.q2.txt;
+  G.t1.a = ''; G.t2.a = '';
+  G.t1.s = 0; G.t2.s = 0; // أداء الجولة يصفّر من جديد لكل جولة
+  renderInput(1); renderInput(2);
+  refresh();
+
+  G.active = true;
+  initTimer();
+}
+
+function nextRound() {
+  G.round++;
+  scheduleRound();
+}
+
+function initTimer() {
+  clearInterval(G.tmr);
+  if (G.suddenDeath || G.roundDuration === 0) { document.getElementById('tim').style.display = 'none'; return; }
+  document.getElementById('tim').style.display = '';
+  document.getElementById('time').style.color = '#fff';
+  G.left = G.roundDuration;
+  tick();
+  G.tmr = setInterval(tick, 1000);
+}
+
+function renderTimer() {
+  const m = String(Math.floor(G.left / 60)).padStart(2, '0');
+  const s = String(G.left % 60).padStart(2, '0');
+  document.getElementById('time').textContent = toAr(m) + ':' + toAr(s);
+}
+
+function tick() {
+  renderTimer();
+  if (G.left <= 10) document.getElementById('time').style.color = '#f87171';
+  if (G.left <= 0) {
+    clearInterval(G.tmr);
+    finishRound();
+    return;
+  }
+  G.left--;
+}
+
+// تنتهي كل جولة بمنح نقطة لفريق اللي جاوب أكثر صح فيها، نعرض شاشة النتيجة،
+// وبعدها نقرر: جولة جديدة، أو جولة فاصلة (لو تعادل الفريقان بالنقاط)، أو نهاية المباراة
+function finishRound() {
+  let pointTeam = 0;
+  if      (G.t1.s > G.t2.s) { G.roundWins1++; pointTeam = 1; }
+  else if (G.t2.s > G.t1.s) { G.roundWins2++; pointTeam = 2; }
+  refresh();
+
+  showResult(pointTeam, () => {
+    if (G.isTiebreaker) {
+      if (G.roundWins1 === G.roundWins2) startSuddenDeath();
+      else endGame();
+      return;
+    }
+
+    if (G.round + 1 < G.totalRounds) {
+      nextRound();
+    } else if (G.roundWins1 === G.roundWins2) {
+      startTiebreaker();
+    } else {
+      endGame();
+    }
+  });
+}
+
+function endGame() {
+  G.active = false;
+  clearInterval(G.tmr);
+  let w, em;
+  if      (G.roundWins1 > G.roundWins2) { w = G.team1Name; em = '🏆'; }
+  else if (G.roundWins2 > G.roundWins1) { w = G.team2Name; em = '🏆'; }
+  else                                   { w = t('tie');    em = '🤝'; }
+  document.getElementById('goem').textContent = em;
+  document.getElementById('gowin').textContent = w;
+  document.getElementById('gosc').textContent  = `${G.team1Name}: ${toAr(G.roundWins1)}  —  ${G.team2Name}: ${toAr(G.roundWins2)}`;
+  document.getElementById('gameover').style.display = 'flex';
+}
+
+function goHome() {
+  G.active = false;
+  clearInterval(G.tmr);
+  clearInterval(G.readyTmr);
+  clearTimeout(G.resultTmr);
+  window.location.href = 'Home.html';
+}
+
+function back() { goHome(); }
+
+// يُستدعى تلقائيًا من lang.js كل ما تتغيّر اللغة — نحدّث كل شي متأثر برقم اللغة (أرقام/نصوص ديناميكية)
+function onLangChange() {
+  document.title = t('pageTitleGame');
+  buildNP('np1', 1);
+  buildNP('np2', 2);
+  renderInput(1);
+  renderInput(2);
+  refresh();
+  updateRoundLabels();
+  if (G.roundDuration > 0 && !G.suddenDeath) renderTimer();
+}
+
+// ── Read settings from localStorage then start ──
+document.addEventListener('DOMContentLoaded', () => {
+  document.title = t('pageTitleGame');
+  // Map Home.html select values → operator symbols
+  const opMap = { all:'all', addition:'+', subtraction:'-', multiplication:'×', division:'÷' };
+
+  G.mode  = localStorage.getItem('game_mode') || 'individual';
+  G.team1Name = localStorage.getItem('game_team1_name') || t('fallbackTeam1');
+  G.team2Name = localStorage.getItem('game_team2_name') || t('fallbackTeam2');
+
+  try { G.members1 = JSON.parse(localStorage.getItem('game_team1_members') || '[]'); } catch (e) { G.members1 = []; }
+  try { G.members2 = JSON.parse(localStorage.getItem('game_team2_members') || '[]'); } catch (e) { G.members2 = []; }
+  if (!G.members1.length) G.members1 = [G.team1Name];
+  if (!G.members2.length) G.members2 = [G.team2Name];
+
+  G.op   = opMap[localStorage.getItem('game_op')] || 'all';
+  G.diff = localStorage.getItem('game_diff') || 'medium';
+
+  // عدد الجولات = أكبر عدد أعضاء بين الفريقين (فردي = عضو واحد لكل جهة = جولة واحدة)
+  G.totalRounds    = Math.max(G.members1.length, G.members2.length);
+  G.roundDuration  = parseInt(localStorage.getItem('game_time') || '0');
+  G.queue1 = buildQueue(G.members1, G.totalRounds);
+  G.queue2 = buildQueue(G.members2, G.totalRounds);
+  G.round  = 0;
+
+  buildNP('np1', 1);
+  buildNP('np2', 2);
+  refresh();
+  scheduleRound();
+});
+</script>
+</body>
+</html>
