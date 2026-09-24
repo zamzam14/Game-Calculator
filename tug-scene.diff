@@ -1,0 +1,259 @@
+From d48f7a8c5ca9c189ae3775e2d8138a0518f4ee18 Mon Sep 17 00:00:00 2001
+From: Zamzam Issa Al Balushi <noreply@example.com>
+Date: Thu, 24 Sep 2026 07:21:02 +0000
+Subject: [PATCH] Replace tug scene with line-art kids drawing (tug-scene.js)
+
+---
+ Game.html    |  70 ++------------------------------
+ style.css    |  15 ++++++-
+ tug-scene.js | 112 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 130 insertions(+), 67 deletions(-)
+ create mode 100644 tug-scene.js
+
+diff --git a/Game.html b/Game.html
+index 07a374b..a6a1aa0 100644
+--- a/Game.html
++++ b/Game.html
+@@ -9,6 +9,7 @@
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="style.css">
+   <script src="lang.js"></script>
++  <script src="tug-scene.js"></script>
+ </head>
+ <body>
+ <!--Header-->
+@@ -48,71 +49,7 @@
+           <span style="color:#ef4444" id="sc2c">0</span>
+         </div>
+ 
+-        <svg viewBox="0 0 500 185" xmlns="http://www.w3.org/2000/svg" style="width:100%">
+-          <!-- Ground -->
+-          <rect x="10" y="156" width="480" height="5" rx="2.5" fill="#e0e0e0"/>
+-          <!-- Center dashed -->
+-          <line x1="250" y1="42" x2="250" y2="161" stroke="#ddd" stroke-width="2" stroke-dasharray="6,4"/>
+-
+-          <!-- ROPE -->
+-          <line id="rope" x1="148" y1="106" x2="352" y2="106" stroke="#a0712a" stroke-width="5" stroke-linecap="round"/>
+-
+-          <!-- FLAG -->
+-          <g id="flag" transform="translate(250,106)">
+-            <rect x="-2.5" y="-24" width="5" height="34" fill="#555" rx="1"/>
+-            <polygon points="2.5,-24 28,-14 2.5,-4" fill="#ef4444"/>
+-          </g>
+-
+-          <!-- TEAM 1 — blue, left side, pulling right -->
+-          <!-- Person A (front) -->
+-          <g stroke-linecap="round" stroke-linejoin="round">
+-            <circle cx="106" cy="64" r="14" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+-            <circle cx="102" cy="61" r="2.5" fill="#fff"/>
+-            <circle cx="102" cy="61" r="1.5" fill="#1e3a8a"/>
+-            <!-- body lean-back -->
+-            <line x1="118" y1="148" x2="106" y2="100" stroke="#3b82f6" stroke-width="9" stroke-linecap="round"/>
+-            <!-- legs -->
+-            <line x1="118" y1="148" x2="134" y2="156" stroke="#1d4ed8" stroke-width="8" stroke-linecap="round"/>
+-            <line x1="118" y1="148" x2="102" y2="156" stroke="#1d4ed8" stroke-width="8" stroke-linecap="round"/>
+-            <!-- front arm → rope -->
+-            <line x1="108" y1="116" x2="150" y2="106" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+-            <!-- back arm -->
+-            <line x1="108" y1="116" x2="78" y2="122" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+-          </g>
+-
+-          <!-- Person B (back) -->
+-          <g stroke-linecap="round" stroke-linejoin="round">
+-            <circle cx="64" cy="73" r="13" fill="#60a5fa" stroke="#1d4ed8" stroke-width="2"/>
+-            <line x1="76" y1="148" x2="64" y2="112" stroke="#60a5fa" stroke-width="9" stroke-linecap="round"/>
+-            <line x1="76" y1="148" x2="90" y2="156" stroke="#2563eb" stroke-width="8" stroke-linecap="round"/>
+-            <line x1="76" y1="148" x2="62" y2="156" stroke="#2563eb" stroke-width="8" stroke-linecap="round"/>
+-            <line x1="64" y1="124" x2="106" y2="118" stroke="#60a5fa" stroke-width="6" stroke-linecap="round"/>
+-            <line x1="64" y1="124" x2="38" y2="130" stroke="#60a5fa" stroke-width="6" stroke-linecap="round"/>
+-          </g>
+-
+-          <!-- TEAM 2 — red, right side, pulling left -->
+-          <!-- Person A (front) -->
+-          <g stroke-linecap="round" stroke-linejoin="round">
+-            <circle cx="394" cy="64" r="14" fill="#ef4444" stroke="#b91c1c" stroke-width="2"/>
+-            <circle cx="398" cy="61" r="2.5" fill="#fff"/>
+-            <circle cx="398" cy="61" r="1.5" fill="#5c1a1a"/>
+-            <line x1="382" y1="148" x2="394" y2="100" stroke="#ef4444" stroke-width="9" stroke-linecap="round"/>
+-            <line x1="382" y1="148" x2="366" y2="156" stroke="#b91c1c" stroke-width="8" stroke-linecap="round"/>
+-            <line x1="382" y1="148" x2="398" y2="156" stroke="#b91c1c" stroke-width="8" stroke-linecap="round"/>
+-            <line x1="392" y1="116" x2="350" y2="106" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/>
+-            <line x1="392" y1="116" x2="422" y2="122" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/>
+-          </g>
+-
+-          <!-- Person B (back) -->
+-          <g stroke-linecap="round" stroke-linejoin="round">
+-            <circle cx="436" cy="73" r="13" fill="#f87171" stroke="#b91c1c" stroke-width="2"/>
+-            <line x1="424" y1="148" x2="436" y2="112" stroke="#f87171" stroke-width="9" stroke-linecap="round"/>
+-            <line x1="424" y1="148" x2="410" y2="156" stroke="#dc2626" stroke-width="8" stroke-linecap="round"/>
+-            <line x1="424" y1="148" x2="438" y2="156" stroke="#dc2626" stroke-width="8" stroke-linecap="round"/>
+-            <line x1="436" y1="124" x2="394" y2="118" stroke="#f87171" stroke-width="6" stroke-linecap="round"/>
+-            <line x1="436" y1="124" x2="462" y2="130" stroke="#f87171" stroke-width="6" stroke-linecap="round"/>
+-          </g>
+-        </svg>
++        <svg id="tugScene" class="tug-scene" viewBox="0 88 900 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="شد الحبل"></svg>
+ 
+         <div class="barwrap">
+           <div class="bar1" id="bar1" style="width:50%"></div>
+@@ -276,6 +213,7 @@ function submit(t) {
+   else         { G.q2 = nq; document.getElementById('q2').textContent = nq.txt; }
+   renderInput(t);
+   refresh();
++  if (ok) TugScene.shake();
+ 
+   // في الموت المفاجئ: أول إجابة صحيحة تحسم المباراة فورًا بدون انتظار المؤقت
+   if (ok && G.suddenDeath) {
+@@ -296,7 +234,7 @@ function refresh() {
+   const tot = G.t1.s + G.t2.s;
+   const r   = tot === 0 ? 0.5 : G.t1.s / tot;
+   // شد الحبل يعكس أداء الجولة الحالية الحية
+-  document.getElementById('flag').setAttribute('transform', `translate(${250 + (r - 0.5) * 180},106)`);
++  TugScene.update(r);
+   const p1 = Math.round(r * 100);
+   document.getElementById('bar1').style.width = p1 + '%';
+   document.getElementById('bar2').style.width = (100 - p1) + '%';
+diff --git a/style.css b/style.css
+index 8c46988..75bda0a 100644
+--- a/style.css
++++ b/style.css
+@@ -808,4 +808,17 @@ body#hero-img > .lang-toggle {
+   .tc { min-width: unset; }
+ 
+   .tq { font-size: 1.8em; }
+-}
+\ No newline at end of file
++}
++/* ── مشهد شد الحبل (tug-scene.js) ── */
++.tug-scene { display: block; width: 100%; height: auto; overflow: hidden; }
++.tug-scene .tow-rig { transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
++.tug-scene .tow-kid { transform-box: fill-box; transform-origin: 55% 100%; }
++.tug-scene.is-tugging .tow-kid { animation: tow-tug 0.16s ease-in-out 6 alternate; }
++@keyframes tow-tug {
++  from { transform: rotate(-3deg) translateX(-1px); }
++  to   { transform: rotate(2deg) translateX(1.5px); }
++}
++@media (prefers-reduced-motion: reduce) {
++  .tug-scene .tow-rig { transition-duration: 0.25s; transition-timing-function: ease-out; }
++  .tug-scene.is-tugging .tow-kid { animation: none; }
++}
+diff --git a/tug-scene.js b/tug-scene.js
+new file mode 100644
+index 0000000..46d21f8
+--- /dev/null
++++ b/tug-scene.js
+@@ -0,0 +1,112 @@
++// مشهد شد الحبل: ٦ أطفال بأسلوب الخط الواحد + حبل يتحرك كوحدة واحدة
++// TugScene.update(r)  → r من 0 إلى 1 (نسبة إجابات الفريق 1 الصحيحة)، 0.5 = المنتصف
++// TugScene.shake()    → اهتزاز خفيف للأطفال أثناء الشد
++const TugScene = (() => {
++  const NS = 'http://www.w3.org/2000/svg';
++  const INK = '#000', HAIR = '#7A4A2A';
++  const CENTER = 450, ROPE_Y = 170, GROUND_Y = 263, MAX = 130;
++  const TEAM1 = '#3b82f6', TEAM2 = '#ef4444';
++
++  const LEFT = [
++    { x: 380, shirt: '#FFD23F', shorts: '#3D5A80', skin: '#F6C9A6', pony: false },
++    { x: 312, shirt: '#3BCE8C', shorts: '#8C5A3C', skin: '#E3A77F', pony: true },
++    { x: 244, shirt: '#FF7AA2', shorts: '#3D5A80', skin: '#F6C9A6', pony: false },
++  ];
++  const RIGHT = [
++    { x: 520, shirt: '#9B72F2', shorts: '#3D5A80', skin: '#E3A77F', pony: true },
++    { x: 588, shirt: '#4CC9F0', shorts: '#8C5A3C', skin: '#F6C9A6', pony: false },
++    { x: 656, shirt: '#FFD23F', shorts: '#3D5A80', skin: '#E3A77F', pony: false },
++  ];
++
++  let svg, rig, goalL, goalR, shakeTimer;
++
++  const limb = (d, c, w = 4) =>
++    `<path d="${d}" fill="none" stroke="${INK}" stroke-width="${w + 3}" stroke-linecap="round" stroke-linejoin="round"/>` +
++    `<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
++
++  const rope = (d) =>
++    `<g fill="none" stroke-linecap="round" stroke-linejoin="round">` +
++    `<path d="${d}" stroke="${INK}" stroke-width="7.5"/>` +
++    `<path d="${d}" stroke="#E6B96F" stroke-width="4.5"/>` +
++    `<path d="${d}" stroke="#B9853E" stroke-width="4.5" stroke-dasharray="2 6"/></g>`;
++
++  const coil = (cx, cy, rx, ry) =>
++    rope(`M ${cx - rx} ${cy} a ${rx} ${ry} 0 1 0 ${2 * rx} 0 a ${rx} ${ry} 0 1 0 ${-2 * rx} 0`);
++
++  function kid(k, flip, delay) {
++    return `<g transform="translate(${k.x} ${ROPE_Y}) scale(${flip ? -1 : 1} 1)">
++      <g class="tow-kid" style="animation-delay:${delay}ms">
++        ${limb('M -14 44 L -7 68 L -10 90', k.skin)}
++        <path d="M -16 92 L -3 92" stroke="${INK}" stroke-width="5.5" stroke-linecap="round"/>
++        ${limb('M -12 44 L 3 65 L 12 89', k.skin)}
++        <path d="M 9 91 L 22 91" stroke="${INK}" stroke-width="5.5" stroke-linecap="round"/>
++        <path d="M -26 46 L -6 36 L 5 55 L -9 60 L -13 52 L -19 62 Z" fill="${k.shorts}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
++        ${limb('M -40 4 Q -20 6 -3 1', k.skin, 3.5)}
++        <path d="M -32 -5 Q -46 -2 -53 9 L -27 50 Q -14 46 -4 38 Z" fill="${k.shirt}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
++        ${limb('M -36 8 Q -16 9 4 0', k.skin, 3.5)}
++        <circle cx="-50" cy="-17" r="13" fill="${k.skin}" stroke="${INK}" stroke-width="2"/>
++        <path d="M -40 -27 A 14 14 0 0 0 -62 -7 Q -49 -13 -40 -27 Z" fill="${HAIR}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
++        ${k.pony ? `<circle cx="-66" cy="-24" r="5.5" fill="${HAIR}" stroke="${INK}" stroke-width="2"/>` : ''}
++        <circle cx="-3" cy="1" r="3.8" fill="${k.skin}" stroke="${INK}" stroke-width="1.8"/>
++        <circle cx="4" cy="0" r="3.8" fill="${k.skin}" stroke="${INK}" stroke-width="1.8"/>
++      </g></g>`;
++  }
++
++  function build() {
++    svg = document.getElementById('tugScene');
++    if (!svg) return;
++    let ticks = '';
++    for (let i = -5; i <= 5; i++) {
++      const tx = CENTER + i * (MAX / 5);
++      const goal = Math.abs(i) === 5;
++      ticks += `<line ${goal ? `id="${i < 0 ? 'tugGoalL' : 'tugGoalR'}"` : ''} x1="${tx}" x2="${tx}"
++        y1="${GROUND_Y + 7}" y2="${GROUND_Y + (goal ? 20 : 12)}" stroke="${INK}"
++        stroke-width="${goal ? 5 : 1.5}" stroke-linecap="round"/>`;
++    }
++    const le = LEFT[2].x, re = RIGHT[2].x;
++    svg.innerHTML = `
++      <line x1="16" y1="${GROUND_Y}" x2="884" y2="${GROUND_Y}" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>
++      ${ticks}
++      <line x1="${CENTER}" y1="98" x2="${CENTER}" y2="${GROUND_Y + 26}" stroke="${INK}" stroke-width="3" stroke-dasharray="0.1 9" stroke-linecap="round"/>
++      <g id="tugRig" class="tow-rig">
++        ${rope(`M ${le} ${ROPE_Y} L ${re} ${ROPE_Y}`)}
++        ${rope(`M ${le} ${ROPE_Y} C 210 172 198 222 187 257`)}
++        ${coil(160, 259, 28, 7)}${coil(158, 253, 20, 5)}
++        ${rope(`M ${re} ${ROPE_Y} C 690 172 702 222 713 257`)}
++        ${coil(740, 259, 28, 7)}${coil(742, 253, 20, 5)}
++        <g transform="translate(${CENTER} ${ROPE_Y})" stroke="${INK}" stroke-width="2" stroke-linejoin="round" fill="#E63946">
++          <path d="M -2 3 L -8 24 L -3 21 L 1 26 Z"/><path d="M 2 3 L 7 23 L 2 21 Z"/>
++          <path d="M 0 0 L -13 -9 L -13 9 Z"/><path d="M 0 0 L 13 -9 L 13 9 Z"/><circle r="4"/>
++        </g>
++        ${LEFT.map((k, i) => kid(k, false, i * 60)).join('')}
++        ${RIGHT.map((k, i) => kid(k, true, i * 60 + 30)).join('')}
++      </g>`;
++    rig = document.getElementById('tugRig');
++    goalL = document.getElementById('tugGoalL');
++    goalR = document.getElementById('tugGoalR');
++  }
++
++  // الفريق 1 يظهر يمين الشاشة بالعربي ويسارها بالإنجليزي — نخلي أطفاله بنفس الجهة
++  const team1OnRight = () => document.documentElement.dir === 'rtl';
++
++  function update(r) {
++    if (!svg) build();
++    if (!rig) return;
++    const right = team1OnRight();
++    goalR.setAttribute('stroke', right ? TEAM1 : TEAM2);
++    goalL.setAttribute('stroke', right ? TEAM2 : TEAM1);
++    const tx = (r - 0.5) * 2 * MAX * (right ? 1 : -1);
++    rig.style.transform = `translateX(${tx}px)`;
++  }
++
++  function shake() {
++    if (!svg) return;
++    svg.classList.remove('is-tugging');
++    void svg.getBoundingClientRect();
++    svg.classList.add('is-tugging');
++    clearTimeout(shakeTimer);
++    shakeTimer = setTimeout(() => svg.classList.remove('is-tugging'), 1000);
++  }
++
++  return { build, update, shake };
++})();
+-- 
+2.43.0
+

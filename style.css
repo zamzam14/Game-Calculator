@@ -809,3 +809,16 @@ body#hero-img > .lang-toggle {
 
   .tq { font-size: 1.8em; }
 }
+/* ── مشهد شد الحبل (tug-scene.js) ── */
+.tug-scene { display: block; width: 100%; height: auto; overflow: hidden; }
+.tug-scene .tow-rig { transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.tug-scene .tow-kid { transform-box: fill-box; transform-origin: 55% 100%; }
+.tug-scene.is-tugging .tow-kid { animation: tow-tug 0.16s ease-in-out 6 alternate; }
+@keyframes tow-tug {
+  from { transform: rotate(-3deg) translateX(-1px); }
+  to   { transform: rotate(2deg) translateX(1.5px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tug-scene .tow-rig { transition-duration: 0.25s; transition-timing-function: ease-out; }
+  .tug-scene.is-tugging .tow-kid { animation: none; }
+}
