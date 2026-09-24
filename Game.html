@@ -231,8 +231,9 @@ function refresh() {
   // sc1c/sc2c: نقاط الفريق الرسمية (عدد الجولات المكسوبة) — هذا اللي يحدد الفائز بالنهاية
   document.getElementById('sc1c').textContent = toAr(G.roundWins1);
   document.getElementById('sc2c').textContent = toAr(G.roundWins2);
-  const tot = G.t1.s + G.t2.s;
-  const r   = tot === 0 ? 0.5 : G.t1.s / tot;
+  // كل فرق إجابة صحيحة = خطوة واحدة للحبل، و5 خطوات = أقصى حد
+  const diff = G.t1.s - G.t2.s;
+  const r    = 0.5 + Math.max(-0.5, Math.min(0.5, diff / 10));
   // شد الحبل يعكس أداء الجولة الحالية الحية
   TugScene.update(r);
   const p1 = Math.round(r * 100);
